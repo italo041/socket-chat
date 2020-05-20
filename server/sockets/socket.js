@@ -5,7 +5,8 @@ const { crearMensaje } = require('../utilidades/utilidades');
 const usuarios = new Usuarios();
 
 io.on('connection', (client) => {
-
+      console.log(client.handshake.headers);
+      
      client.on('entrarChat', (data, callback) => {
 
          
