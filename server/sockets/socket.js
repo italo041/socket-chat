@@ -63,6 +63,25 @@ io.on("connection", (client) => {
     }
   });
 
+client.on("cerrarsesion", () => {
+    try {
+      let personaBorrada = usuarios.borrarPersona(client.id);
+
+      client.broadcast
+        .to(personaBorrada.sala)
+        .emit(
+          "crearMensaje",
+          crearMensaje("Administrador", `${personaBorrada.nombre} salio.`)
+        );
+      client.broadcast
+        .to(personaBorrada.sala)
+        .emit("listaPersona", usuarios.getPersonasPorSala(personaBorrada.sala));
+    } catch (error) {
+       console.log(error);
+       
+    }
+  });
+
   //mensajes privados
 
   client.on("mensajePrivado", (data) => {
