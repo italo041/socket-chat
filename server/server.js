@@ -15,6 +15,7 @@ const port = process.env.PORT || 3001;
 app.get('/', (req, res) => {
     res.send("Node Server is running. Yay!!")
 })
+
 // IO = esta es la comunicacion del backend
 module.exports.io = socketIO(server);
 require('./sockets/socket');
