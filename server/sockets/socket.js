@@ -5,7 +5,7 @@ const { crearMensaje } = require("../utilidades/utilidades");
 const usuarios = new Usuarios();
 
 io.on("connection", (client) => {
-  console.log(client);
+  console.log(client.id);
 
   client.on("entrarChat", (data, callback) => {
     if (!data.nombre || !data.sala) {
@@ -16,6 +16,9 @@ io.on("connection", (client) => {
     }
 
     client.join(data.sala);
+
+    console.log("El usuario"+data.nombre+ "se unio a :"+ data.sala);
+    
 
     usuarios.agregarPersona(client.id, data.nombre, data.sala);
 
