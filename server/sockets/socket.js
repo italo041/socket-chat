@@ -17,8 +17,7 @@ io.on("connection", (client) => {
 
     client.join(data.sala);
 
-    console.log("El usuario"+data.nombre+ "se unio a :"+ data.sala);
-    
+    console.log("El usuario" + data.nombre + "se unio a :" + data.sala);
 
     usuarios.agregarPersona(client.id, data.nombre, data.sala);
 
@@ -36,12 +35,16 @@ io.on("connection", (client) => {
   });
 
   client.on("crearMensaje", (data, callback) => {
-    let persona = usuarios.getPersona(client.id);
+    try {
+      let persona = usuarios.getPersona(client.id);
 
-    let mensaje = crearMensaje(persona.nombre, data.mensaje);
-    client.broadcast.to(persona.sala).emit("crearMensaje", mensaje);
+      let mensaje = crearMensaje(persona.nombre, data.mensaje);
+      client.broadcast.to(persona.sala).emit("crearMensaje", mensaje);
 
-    callback(mensaje);
+      callback(mensaje);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   client.on("disconnect", () => {
@@ -58,12 +61,11 @@ io.on("connection", (client) => {
         .to(personaBorrada.sala)
         .emit("listaPersona", usuarios.getPersonasPorSala(personaBorrada.sala));
     } catch (error) {
-       console.log(error);
-       
+      console.log(error);
     }
   });
 
-client.on("cerrarsesion", () => {
+  client.on("cerrarsesion", () => {
     try {
       let personaBorrada = usuarios.borrarPersona(client.id);
 
@@ -77,18 +79,25 @@ client.on("cerrarsesion", () => {
         .to(personaBorrada.sala)
         .emit("listaPersona", usuarios.getPersonasPorSala(personaBorrada.sala));
     } catch (error) {
-       console.log(error);
-       
+      console.log(error);
     }
+  });
+
+  client.on("connect_failed", function () {
+    console.log("Connection Failed");
   });
 
   //mensajes privados
 
   client.on("mensajePrivado", (data) => {
-    let persona = usuarios.getPersona(client.id);
+    try {
+      let persona = usuarios.getPersona(client.id);
 
-    client.broadcast
-      .to(data.para)
-      .emit("mensajePrivado", crearMensaje(persona.nombre, data.mensaje));
+      client.broadcast
+        .to(data.para)
+        .emit("mensajePrivado", crearMensaje(persona.nombre, data.mensaje));
+    } catch (error) {
+      console.log(error);
+    }
   });
 });
