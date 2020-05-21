@@ -43,6 +43,7 @@ io.on("connection", (client) => {
 
       callback(mensaje);
     } catch (error) {
+console.log("crear mensaje");
       console.log(error);
     }
   });
@@ -61,6 +62,7 @@ console.log("El usuario " + personaBorrada.nombre + " salió de la sala");
         .to(personaBorrada.sala)
         .emit("listaPersona", usuarios.getPersonasPorSala(personaBorrada.sala));
     } catch (error) {
+console.log("disconecte");
       console.log(error);
     }
   });
