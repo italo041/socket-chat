@@ -17,7 +17,7 @@ io.on("connection", (client) => {
 
     client.join(data.sala);
 
-    console.log("El usuario" + data.nombre + "se unio a :" + data.sala);
+    console.log("El usuario " + data.nombre + " se unio a :" + data.sala);
 
     usuarios.agregarPersona(client.id, data.nombre, data.sala);
 
@@ -50,7 +50,7 @@ io.on("connection", (client) => {
   client.on("disconnect", () => {
     try {
       let personaBorrada = usuarios.borrarPersona(client.id);
-
+console.log("El usuario " + personaBorrada.nombre + " salió de la sala");
       client.broadcast
         .to(personaBorrada.sala)
         .emit(
